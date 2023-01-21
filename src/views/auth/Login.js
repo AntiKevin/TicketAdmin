@@ -1,6 +1,26 @@
 import React from "react";
+import axios from 'axios';
+import Cookies from 'js-cookie'
+//hooks
+import { useState } from 'react';
 
 export default function Login() {
+
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  const loginJWT = async () => {
+
+    await axios.post('https://api-ticketvision.up.railway.app/auth-token/', {
+      username: username,
+      password: password,
+    })
+    .then(function (response) {
+      Cookies.set('auth_token', response.data.access)
+    })
+    .catch(function (error) {
+    });
+  }
   return (
     <>
       <div className="container mx-auto px-4 h-full">
@@ -23,12 +43,14 @@ export default function Login() {
                       className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                       htmlFor="grid-password"
                     >
-                      Email
+                      Username
                     </label>
                     <input
-                      type="email"
+                      type="username"
                       className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                       placeholder="Email"
+                      value={username}
+                      onChange={e => setUsername(e.target.value)}
                     />
                   </div>
 
@@ -43,6 +65,8 @@ export default function Login() {
                       type="password"
                       className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                       placeholder="Password"
+                      value={password}
+                      onChange={e => setPassword(e.target.value)}
                     />
                   </div>
                   <div>
@@ -61,7 +85,8 @@ export default function Login() {
                   <div className="text-center mt-6">
                     <button
                       className="bg-blueGray-800 text-white active:bg-blueGray-600 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full ease-linear transition-all duration-150"
-                      type="button"
+                      type="submit"
+                      onClick={loginJWT}
                     >
                       Sign In
                     </button>
