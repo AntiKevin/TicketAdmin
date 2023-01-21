@@ -6,11 +6,20 @@ import { useState } from 'react';
 
 export default function Login() {
 
+  //user States
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const loginJWT = async () => {
+  //loading state
+  const [isLoading, setIsLoading] = useState(false);
 
+  const loginJWT = async (e) => {
+    //preventing the default reload
+    e.preventDefault();
+
+    //set loading state
+    setIsLoading(true);
+    
     await axios.post('https://api-ticketvision.up.railway.app/auth-token/', {
       username: username,
       password: password,
@@ -19,7 +28,11 @@ export default function Login() {
       Cookies.set('auth_token', response.data.access)
     })
     .catch(function (error) {
-    });
+    })
+    .finally(() => {
+      window.location.reload()
+      setIsLoading(false);
+    })
   }
   return (
     <>
