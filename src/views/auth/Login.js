@@ -1,10 +1,20 @@
 import React from "react";
 import axios from 'axios';
 import Cookies from 'js-cookie'
+import { isAuthenticated } from "../../auth";
 //hooks
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+
+
+
 
 export default function Login() {
+  const history = useHistory();
+  useEffect(() => {
+    if (isAuthenticated()) {
+      history.push('/dashboard');}
+  })
 
   //user States
   const [username, setUsername] = useState('');
@@ -27,13 +37,86 @@ export default function Login() {
     .then(function (response) {
       Cookies.set('auth_token', response.data.access)
     })
-    .catch(function (error) {
-    })
-    .finally(() => {
-      window.location.reload()
+    .catch(function () {
       setIsLoading(false);
     })
+    .finally(() => {
+      //window.location.reload()
+      if(isAuthenticated()){
+        history.push('/dashboard');
+      }
+    })
   }
+
+  //jsx area
+
+  const loadingForm = () => {
+    return (
+      <div>Carregando...</div>
+    )
+  }
+  
+  const defaultForm = () => {
+    return (
+      <form>
+        <div className="relative w-full mb-3">
+          <label
+            className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+            htmlFor="grid-password"
+          >
+            Username
+          </label>
+          <input
+            type="email"
+            className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+            placeholder="Email"
+            value={username}
+            onChange={e => setUsername(e.target.value)}
+          />
+        </div>
+
+        <div className="relative w-full mb-3">
+          <label
+            className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+            htmlFor="grid-password"
+          >
+            Password
+          </label>
+          <input
+            type="password"
+            className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+            placeholder="Password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+          />
+        </div>
+        <div>
+          <label className="inline-flex items-center cursor-pointer">
+            <input
+              id="customCheckLogin"
+              type="checkbox"
+              className="form-checkbox border-0 rounded text-blueGray-700 ml-1 w-5 h-5 ease-linear transition-all duration-150"
+            />
+            <span className="ml-2 text-sm font-semibold text-blueGray-600">
+              Lembrar
+            </span>
+          </label>
+        </div>
+
+        <div className="text-center mt-6">
+          <button
+            className="bg-blueGray-800 text-white active:bg-blueGray-600 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full ease-linear transition-all duration-150"
+            type="submit"
+            onClick={loginJWT}
+          >
+            Login
+          </button>
+        </div>
+      </form>
+    )
+  }
+
+
   return (
     <>
       <div className="container mx-auto px-4 h-full">
@@ -50,61 +133,7 @@ export default function Login() {
               <div className="flex-auto px-4 lg:px-10 py-10 pt-0">
                 <div className="text-blueGray-400 text-center mb-3 font-bold">
                 </div>
-                <form>
-                  <div className="relative w-full mb-3">
-                    <label
-                      className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                      htmlFor="grid-password"
-                    >
-                      Username
-                    </label>
-                    <input
-                      type="username"
-                      className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                      placeholder="Email"
-                      value={username}
-                      onChange={e => setUsername(e.target.value)}
-                    />
-                  </div>
-
-                  <div className="relative w-full mb-3">
-                    <label
-                      className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                      htmlFor="grid-password"
-                    >
-                      Password
-                    </label>
-                    <input
-                      type="password"
-                      className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                      placeholder="Password"
-                      value={password}
-                      onChange={e => setPassword(e.target.value)}
-                    />
-                  </div>
-                  <div>
-                    <label className="inline-flex items-center cursor-pointer">
-                      <input
-                        id="customCheckLogin"
-                        type="checkbox"
-                        className="form-checkbox border-0 rounded text-blueGray-700 ml-1 w-5 h-5 ease-linear transition-all duration-150"
-                      />
-                      <span className="ml-2 text-sm font-semibold text-blueGray-600">
-                        Remember me
-                      </span>
-                    </label>
-                  </div>
-
-                  <div className="text-center mt-6">
-                    <button
-                      className="bg-blueGray-800 text-white active:bg-blueGray-600 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full ease-linear transition-all duration-150"
-                      type="submit"
-                      onClick={loginJWT}
-                    >
-                      Sign In
-                    </button>
-                  </div>
-                </form>
+                {isLoading ? loadingForm() : defaultForm()}
               </div>
             </div>
             <div className="flex flex-wrap mt-6 relative">
