@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 
 // components
@@ -12,8 +12,36 @@ import HeaderStats from "components/Headers/HeaderStats.js";
 import Dashboard from "views/admin/Dashboard.js";
 import Settings from "views/admin/Settings.js";
 import Tables from "views/admin/Tables.js";
+import Cookies from 'js-cookie';
+import axios from 'axios';
+
 
 export default function Admin() {
+
+//user states
+const [userToken, setUserToken] = useState('')
+const [userId, setUserId] = useState('')
+
+useEffect(() => {
+  setUserId(localStorage.getItem("user_id"))
+  setUserToken(Cookies.get("auth_token"))
+  
+  const res = axios.get(`https://api-ticketvision.up.railway.app/Users/${userId}/`, {
+    headers: {
+      'Authorization': `Bearer ${userToken}`
+    }
+  });
+
+
+  axios.post('https://api-ticketvision.up.railway.app/auth-refresh-token/', {
+        refresh: userToken,
+      })
+      .then(function (response) {
+        Cookies.set('auth_token', response.data.access);
+        setUserToken(response.data.access)
+      })
+  })
+
   return (
     <>
       <Sidebar />
