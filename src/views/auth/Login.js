@@ -1,6 +1,7 @@
 import React from "react";
 import axios from 'axios';
-import Cookies from 'js-cookie'
+import Cookies from 'js-cookie';
+import jwt_decode from 'jwt-decode';
 import { isAuthenticated } from "../../auth";
 //hooks
 import { useState, useEffect } from 'react';
@@ -10,12 +11,14 @@ import { useHistory } from 'react-router-dom';
 
 
 export default function Login() {
+  //router history
   const history = useHistory();
+  
   useEffect(() => {
     if (isAuthenticated()) {
       history.push('/dashboard');}
   })
-
+ 
   //user States
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -23,6 +26,7 @@ export default function Login() {
   //loading state
   const [isLoading, setIsLoading] = useState(false);
 
+  //Login main function
   const loginJWT = async (e) => {
     //preventing the default reload
     e.preventDefault();
@@ -35,13 +39,14 @@ export default function Login() {
       password: password,
     })
     .then(function (response) {
-      Cookies.set('auth_token', response.data.access)
+      Cookies.set('auth_token', response.data.access);
+      //storing user id from jwt token
+      localStorage.setItem('user_id', jwt_decode(response.data.access).user_id);
     })
     .catch(function () {
       setIsLoading(false);
     })
     .finally(() => {
-      //window.location.reload()
       if(isAuthenticated()){
         history.push('/dashboard');
       }
