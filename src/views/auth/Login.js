@@ -8,38 +8,36 @@ import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
 
-
-
 export default function Login() {
   //router history
   const history = useHistory();
+  //user States
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  //loading state
+  const [isLoading, setIsLoading] = useState(false);
   
   useEffect(() => {
     if (isAuthenticated()) {
       history.push('/dashboard');}
   })
- 
-  //user States
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-
-  //loading state
-  const [isLoading, setIsLoading] = useState(false);
 
   //Login main function
   const loginJWT = async (e) => {
     //preventing the default reload
     e.preventDefault();
-
     //set loading state
-    setIsLoading(true);
-    
+    setIsLoading(true); 
+
     await axios.post('https://api-ticketvision.up.railway.app/auth-token/', {
       username: username,
       password: password,
     })
     .then(function (response) {
-      Cookies.set('auth_token', response.data.access);
+      Cookies.set('auth_token', response.data.access, {
+        expires: 0.00347222});
+      Cookies.set('refresh_token', response.data.refresh, {
+          expires: 1});
       //storing user id from jwt token
       localStorage.setItem('user_id', jwt_decode(response.data.access).user_id);
     })
@@ -49,9 +47,8 @@ export default function Login() {
     .finally(() => {
       if(isAuthenticated()){
         history.push('/dashboard');
-      }
-    })
-  }
+      }})
+    }
 
   //jsx area
 
