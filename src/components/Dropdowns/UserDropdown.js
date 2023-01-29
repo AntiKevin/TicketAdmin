@@ -1,7 +1,13 @@
 import React from "react";
 import { createPopper } from "@popperjs/core";
+import useUserData from "api/useUserData";
+import { UserDataContext } from "context/userDataContext";
+import { useContext } from "react";
 
 const UserDropdown = () => {
+
+  useUserData();
+  const { user } = useContext(UserDataContext);
   // dropdown props
   const [dropdownPopoverShow, setDropdownPopoverShow] = React.useState(false);
   const btnDropdownRef = React.createRef();
@@ -15,7 +21,7 @@ const UserDropdown = () => {
   const closeDropdownPopover = () => {
     setDropdownPopoverShow(false);
   };
-  const UserData = JSON.parse(localStorage.getItem("user_data"));
+  console.log(user)
   return (
     <>
       <a
@@ -51,7 +57,7 @@ const UserDropdown = () => {
           }
           onClick={(e) => e.preventDefault()}
         >
-          {UserData.username}
+        {user.username}
         </a>
         <div className="h-0 my-2 border border-solid border-blueGray-100" />
         <a
