@@ -1,7 +1,7 @@
 import axios from 'axios';
+import Cookies from 'js-cookie';
 import { useContext, useEffect } from 'react';
 import { UserDataContext } from 'context/userDataContext';
-import Cookies from 'js-cookie';
 
 export default function useUserData() {
   const { setUser } = useContext(UserDataContext);

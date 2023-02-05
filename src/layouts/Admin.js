@@ -1,8 +1,9 @@
 import React from "react";
 import axios from 'axios';
 import { useEffect } from "react";
-import { Switch, Route, Redirect } from "react-router-dom";
+import { Switch, Route, Redirect, useHistory } from "react-router-dom";
 import { UserDataContext } from "context/userDataContext";
+import { chamadosContext } from "context/chamadosContext";
 
 // components
 
@@ -20,6 +21,7 @@ import Cookies from 'js-cookie';
 export default function Admin() {
 
   const [user, setUser] = React.useState({});//User data State
+  const [chamados, setChamados] = React.useState({});//User data State
   
   const refreshToken = async (userRefreshToken) => {
     //refresh token async function
@@ -28,7 +30,7 @@ export default function Admin() {
       })
       .then(function (response) {
         Cookies.set('auth_token', response.data.access, {
-          expires: 0.00347222});
+          expires: 0.000694444});
       })}
 
 
@@ -39,11 +41,13 @@ useEffect(() => {
   if (!Cookies.get("auth_token")){
   //checking if the auth token has expired and refreshing
     refreshToken(userRefreshToken)
+
   }})
 
   return (
     <>
     <UserDataContext.Provider value = {{user, setUser}}>
+      <chamadosContext.Provider value = {{chamados, setChamados}}>
       <Sidebar />
       <div className="relative md:ml-64 bg-blueGray-100">
         <AdminNavbar />
@@ -58,6 +62,7 @@ useEffect(() => {
           </Switch>
         </div>
       </div>
+      </chamadosContext.Provider>
     </UserDataContext.Provider>
     </>
   );

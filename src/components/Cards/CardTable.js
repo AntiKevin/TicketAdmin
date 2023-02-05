@@ -11,7 +11,7 @@ import TableDropdown from "components/Dropdowns/TableDropdown.js";
 export default function CardTable({ color }) {
 
   useChamados();
-  const { user } = useContext(chamadosContext);
+  const { chamados } = useContext(chamadosContext);
 
   return (
     <>

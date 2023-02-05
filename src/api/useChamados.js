@@ -4,7 +4,7 @@ import { useContext, useEffect } from 'react';
 import { chamadosContext } from 'context/chamadosContext';
 
 export default function useChamados() {
-  const { setChamado } = useContext(chamadosContext);
+  const { setChamados } = useContext(chamadosContext);
 
   useEffect(() => {
     //const userId = JSON.parse(localStorage.getItem("user_data"))
@@ -15,12 +15,12 @@ export default function useChamados() {
               'Authorization': 'Bearer ' + Cookies.get('auth_token')}
         });
         const data = await response.data;
-        setChamado(data);
+        setChamados(data);
       } catch (error) {
         console.error(error);
       }
       
     }
     fetchData();
-  }, [setChamado]);
+  }, [setChamados]);
 }
