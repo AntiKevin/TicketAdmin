@@ -1,11 +1,18 @@
 import React from "react";
 import PropTypes from "prop-types";
+import useChamados from "api/useChamados";
+import { useContext } from "react";
+import { chamadosContext } from "context/chamadosContext";
 
 // components
 
 import TableDropdown from "components/Dropdowns/TableDropdown.js";
 
 export default function CardTable({ color }) {
+
+  useChamados();
+  const { user } = useContext(chamadosContext);
+
   return (
     <>
       <div

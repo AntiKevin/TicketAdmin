@@ -1,7 +1,7 @@
 import React from "react";
 import axios from 'axios';
 import { useEffect } from "react";
-import { Switch, Route, Redirect, useHistory } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import { UserDataContext } from "context/userDataContext";
 
 // components

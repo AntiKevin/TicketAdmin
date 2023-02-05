@@ -6,8 +6,11 @@ import { useContext } from "react";
 
 const UserDropdown = () => {
 
+  //fetching an storing user data
   useUserData();
   const { user } = useContext(UserDataContext);
+
+
   // dropdown props
   const [dropdownPopoverShow, setDropdownPopoverShow] = React.useState(false);
   const btnDropdownRef = React.createRef();
@@ -21,7 +24,6 @@ const UserDropdown = () => {
   const closeDropdownPopover = () => {
     setDropdownPopoverShow(false);
   };
-  console.log(user)
   return (
     <>
       <a
