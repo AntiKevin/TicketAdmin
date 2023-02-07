@@ -1,9 +1,9 @@
 import React from "react";
-import axios from 'axios';
 import { useEffect } from "react";
-import { Switch, Route, Redirect, useHistory } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import { UserDataContext } from "context/userDataContext";
 import { chamadosContext } from "context/chamadosContext";
+import { refreshToken } from "utils/RefreshToken";
 
 // components
 
@@ -21,27 +21,14 @@ import Cookies from 'js-cookie';
 export default function Admin() {
 
   const [user, setUser] = React.useState({});//User data State
-  const [chamados, setChamados] = React.useState({});//User data State
-  
-  const refreshToken = async (userRefreshToken) => {
-    //refresh token async function
-    await axios.post('https://api-ticketvision.up.railway.app/auth-refresh-token/', {
-        refresh: userRefreshToken,
-      })
-      .then(function (response) {
-        Cookies.set('auth_token', response.data.access, {
-          expires: 0.000694444});
-      })}
+  const [chamados, setChamados] = React.useState({});//User data State-
 
 
 useEffect(() => {
-
-  const userRefreshToken = Cookies.get("refresh_token")
   
   if (!Cookies.get("auth_token")){
   //checking if the auth token has expired and refreshing
-    refreshToken(userRefreshToken)
-
+    refreshToken()
   }})
 
   return (
