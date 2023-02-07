@@ -1,10 +1,15 @@
 import React from "react";
-
+import useChamados from "api/useChamados";
+import { useContext } from "react";
+import { chamadosContext } from "context/chamadosContext";
 // components
 
 import CardStats from "components/Cards/CardStats.js";
 
 export default function HeaderStats() {
+
+  useChamados();
+  const { chamados } = useContext(chamadosContext);
   return (
     <>
       {/* Header */}
@@ -16,7 +21,7 @@ export default function HeaderStats() {
               <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
                 <CardStats
                   statSubtitle="ABERTOS"
-                  statTitle="350,897"
+                  statTitle={chamados.length ? chamados.length.toString() : '--'}
                   statPercentColor="text-emerald-500"
                   statIconName="far fa-chart-bar"
                   statIconColor="bg-red-500"
@@ -25,7 +30,7 @@ export default function HeaderStats() {
               <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
                 <CardStats
                   statSubtitle="TOTAL"
-                  statTitle="2,356"
+                  statTitle={chamados.length ? chamados.length.toString() : '--'}
                   statArrow="down"
                   statPercent="3.48"
                   statPercentColor="text-red-500"
@@ -37,7 +42,7 @@ export default function HeaderStats() {
               <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
                 <CardStats
                   statSubtitle="FECHADOS"
-                  statTitle="924"
+                  statTitle={chamados.length ? '00' : '--'}
                   statArrow="down"
                   statPercent="1.10"
                   statPercentColor="text-orange-500"
@@ -49,7 +54,7 @@ export default function HeaderStats() {
               <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
                 <CardStats
                   statSubtitle="PERFORMANCE"
-                  statTitle="49,65%"
+                  statTitle={chamados.length ? '00%' : '--'}
                   statArrow="up"
                   statPercent="12"
                   statPercentColor="text-emerald-500"
